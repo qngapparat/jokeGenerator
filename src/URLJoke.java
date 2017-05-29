@@ -30,8 +30,7 @@ public class URLJoke {
             }
 
             //set this.maxNumber to the value according to retrieved JSON file
-            String maxNumberString = myObj.getString("value");
-            this.maxNumber = Integer.parseInt(maxNumberString);
+            this.maxNumber = myObj.getInt("value");
 
         }
 
@@ -54,6 +53,7 @@ public class URLJoke {
             String fetchedString = "";
             while (myScanner.hasNext()) {
                 fetchedString += myScanner.next();
+                fetchedString += " ";
             }
             myScanner.close();
 
@@ -77,6 +77,7 @@ public class URLJoke {
            String rawJSON = readURL(urlString);
            //extracts "joke" String from the raw json String.
            String joke = extractJoke(rawJSON);
+           return joke;
        }
 
        catch(MalformedURLException e){
@@ -106,7 +107,7 @@ public class URLJoke {
         return joke;
     }
 
-    /*public static void main(String[] args) throws Exception {
+/*    public static void main(String[] args) throws Exception {
 
         URLJoke myJoke = new URLJoke();
         System.out.println(myJoke.loadJokeFromURL("http://api.icndb.com/jokes/89"));
@@ -150,8 +151,7 @@ public class URLJoke {
 
     String jokeWithCategory(JokeCategory category) throws Exception {
 
-        String baseURL = "http://api.icndb.com/jokes/random?\n" +
-                "limitTo=[" + category.getURLCode() + "]";
+        String baseURL = "http://api.icndb.com/jokes/random?limitTo=[" + category.getURLCode() + "]";
 
         try{
             String rawJSON = readURL(baseURL);
@@ -210,8 +210,22 @@ public class URLJoke {
         }
     }
 
-    String jokeWithCategory(JokeCategory category, String firstName, String lastName){
+    String jokeWithCategory(JokeCategory category, String firstName, String lastName) throws Exception {
+        String baseURL = "http://api.icndb.com/jokes/random?limitTo=[";
+        String categoryString = category.getURLCode() + "]";
+        String firstAppend = "&firstName=" + firstName;
+        String secondAppend = "&lastName=" + lastName;
 
-        
+        baseURL += categoryString + firstAppend + secondAppend;
+
+        try{
+            String rawJSON = readURL(baseURL);
+            String joke = extractJoke(rawJSON);
+            return joke;
+        }
+
+        catch(Exception e){
+            throw new Exception(e);
+        }
     }
 }
