@@ -148,7 +148,46 @@ public class URLJoke {
     }
 
 
-    String jokeWithCategory(JokeCategory category){
+    String jokeWithCategory(JokeCategory category) throws Exception {
+
+        String myURL = "http://api.icndb.com/jokes/random?\n" +
+                "limitTo=[" + category.getURLCode() + "]";
+
+        try{
+            String rawJSON = readURL(myURL);
+            String joke = extractJoke(rawJSON);
+            return joke;
+        }
+
+        catch(Exception e){
+            throw new Exception(e);
+        }
+    }
+
+    String randomJoke(String firstName, String lastName) throws Exception {
+
+        //create base URL and modifiers (appendixes)
+        String myURL = "http://api.icndb.com/jokes/random";
+        String firstAppend = "?firstName=" + firstName;
+        String secondAppend = "&lastName=" + lastName;
+
+        //add modifiers to end of URL
+        myURL += firstAppend + secondAppend;
+
+        try {
+
+            String rawJSON = readURL(myURL);
+            String joke = extractJoke(rawJSON);
+            return joke;
+
+        }
+
+        catch(Exception e){
+            throw new Exception(e);
+        }
+    }
+
+    String jokeWithNumber(int jokeNumber, String firstName, String lastName){
 
     }
 }
