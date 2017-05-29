@@ -11,8 +11,34 @@ import org.json.*;
  */
 public class URLJoke {
 
+    int maxNumber;
+
     public URLJoke(){
 
+    }
+
+    public void initializeMaxValue(){
+
+        try{
+
+            //get JSON file including the maximum value for .../jokes/<number>
+            String rawJSON = readURL("http://api.icndb.com/jokes/count");
+            JSONObject myObj = new JSONObject(rawJSON);
+
+            if(! myObj.getString("type").equals("success")){
+                this.maxNumber = 0;
+            }
+
+            //set this.maxNumber to the value according to retrieved JSON file
+            String maxNumberString = myObj.getString("value");
+            this.maxNumber = Integer.parseInt(maxNumberString);
+
+        }
+
+        catch(Exception e){
+            System.out.println("Problem getting max number");
+            e.printStackTrace();
+        }
     }
 
 
@@ -99,7 +125,30 @@ public class URLJoke {
         }
     }
 
+    public String jokeWithNumber(int number) throws Exception{
+
+        if(number > this.maxNumber){
+            throw new NoJokeFoundException();
+        }
+
+        //assemble URL
+        String myURL = "http://api.icndb.com/jokes/" + Integer.toString(number);
+
+        try {
+            String rawJSON = readURL(myURL);
+            String joke = extractJoke(rawJSON);
+            return joke;
+        }
+
+        catch(Exception e){
+            e.printStackTrace();
+            throw new Exception(e);
+        }
+
+    }
 
 
+    String jokeWithCategory(JokeCategory category){
 
+    }
 }
