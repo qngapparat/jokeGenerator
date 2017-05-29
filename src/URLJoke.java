@@ -150,11 +150,11 @@ public class URLJoke {
 
     String jokeWithCategory(JokeCategory category) throws Exception {
 
-        String myURL = "http://api.icndb.com/jokes/random?\n" +
+        String baseURL = "http://api.icndb.com/jokes/random?\n" +
                 "limitTo=[" + category.getURLCode() + "]";
 
         try{
-            String rawJSON = readURL(myURL);
+            String rawJSON = readURL(baseURL);
             String joke = extractJoke(rawJSON);
             return joke;
         }
@@ -187,7 +187,31 @@ public class URLJoke {
         }
     }
 
-    String jokeWithNumber(int jokeNumber, String firstName, String lastName){
+    String jokeWithNumber(int jokeNumber, String firstName, String lastName) throws Exception {
 
+        if(jokeNumber > this.maxNumber){
+            throw new NoJokeFoundException();
+        }
+
+        String baseURL = "http://api.icndb.com/jokes/";
+        String firstAppend = "?firstName=" + firstName;
+        String secondAppend = "&lastName=" + lastName;
+
+        baseURL += Integer.toString(jokeNumber) + firstAppend + secondAppend;
+
+        try{
+            String rawJSON = readURL(baseURL);
+            String joke = extractJoke(rawJSON);
+            return joke;
+        }
+
+        catch(Exception e){
+            throw new Exception(e);
+        }
+    }
+
+    String jokeWithCategory(JokeCategory category, String firstName, String lastName){
+
+        
     }
 }
