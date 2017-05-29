@@ -11,6 +11,11 @@ import org.json.*;
  */
 public class URLJoke {
 
+    public URLJoke(){
+
+    }
+
+
     public String readURL (String urlString) throws Exception{
 
         try {
@@ -35,11 +40,10 @@ public class URLJoke {
             throw new Exception(e);
         }
 
-        return null;
 
     }
 
-    public String loadJokeFromURL(String urlString) throws Exception{
+    public String loadJokeFromURL (String urlString) throws Exception{
 
        try {
 
@@ -51,6 +55,7 @@ public class URLJoke {
            String fetchedString = "";
            while(myScanner.hasNext()){
                fetchedString += myScanner.next();
+               fetchedString += " ";
            }
            myScanner.close();
 
@@ -77,6 +82,12 @@ public class URLJoke {
            throw new NoJokeFoundException();
        }
 
+    }
+
+    public static void main(String[] args) throws Exception {
+
+        URLJoke myJoke = new URLJoke();
+        System.out.println(myJoke.loadJokeFromURL("http://api.icndb.com/jokes/89"));
     }
 
 
